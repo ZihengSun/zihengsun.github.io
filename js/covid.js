@@ -120,7 +120,8 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
                 
                 // console.log(cols)
 
-                if(statename == cols[5] && cols[6].startsWith(countyname)){
+                if(statename.toLowerCase() == cols[5].toLowerCase() 
+                    && cols[6].toLowerCase().startsWith(countyname.toLowerCase())){
 
                     population = cols[7]
 
@@ -132,20 +133,11 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
             }
 
-            county_ele.html(countyname + ", " + statename)
+            $(county_ele).html(countyname + ", " + statename)
 
-            pop_ele.html(population)
+            $(pop_ele).html(population)
 
-            pop2_ele.html(population)
-
-            // var headings = entries //.splice(0,record_num);
-            // while (entries.length>0) {
-            //     var tarr = [];
-            //     for (var j=0; j<headings.length; j++) {
-            //         tarr.push(headings[j]+":"+entries.shift());
-            //     }
-            //     lines.push(tarr);
-            // }
+            $(pop2_ele).val(population)
         
         }
      });
@@ -164,8 +156,7 @@ function riskestimate(total_population, store_people_count, potential_covid_case
         p = p*((Number(total_population)-i-Number(potential_covid_cases))/Number(total_population))
 
     }
-        
-    console.log("no clash : ", p)
+
     // get clash probability
     var clashp = 1-p
     // make it percentage
@@ -197,7 +188,7 @@ $("#findfips").click(function(){
     // var zipcode = $("#zipcode").val()
 
 
-    getInfoByFIPS(fipscode, $("#county"), $("#popres"), $("#popu"), $("#covid"), $("#potentials"));
+    getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials");
 
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-13-2020.csv
 
@@ -206,19 +197,21 @@ $("#findfips").click(function(){
 
 function getFIPSByZip(zipcode){
 
-    var fips = "N/A"
+    var fipslist = []
 
     for(var i=0;i<zip2fips.length;i+=1){
 
-        if(Number(zip2fips[0])==Number(zipcode)){
+        if(Number(zip2fips[i][0])==Number(zipcode)){
 
-            fips = zip2fips[1]
+            fipslist.push(zip2fips[i][1]) 
 
         }
 
     }
 
-    return fips;
+    // console.log("Find FIPS " + fipslist)
+
+    return fipslist;
 
 }
 
@@ -226,8 +219,18 @@ $("#findzip").click(function(){
 
     var zipcode = $("#zipcode").val()
 
-    var fips = getFIPSByZip(zipcode)
+    var fipslist = getFIPSByZip(zipcode)
 
-    getInfoByFIPS(fips, $("#county2"), $("#popres2"), $("#popu"), $("#covid2"), $("#potentials"));
+    var content = ""
+
+    for(var i=0;i<fipslist.length;i+=1){
+
+        content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials')\" type=\"button\" value=\""+fipslist[i]+"\" > "
+
+    }
+
+    $("#fipsregion").html(content)
+
+    // getInfoByFIPS(fips, "#county2", "#popres2", "#popu", "#covid2", "#potentials");
 
 })
