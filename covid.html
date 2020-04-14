@@ -37,13 +37,13 @@
 
             <td>Population in the Region (Community/City/County/State/Country)</td>
 
-            <td><input type="text" id="population" value="100000"/></td>
+            <td><input type="text" id="popu" value="100000"/></td>
 
         </tr>
 
         <tr>
 
-            <td>Number of People in the grocery stores/gyms/restaurants/workplaces/recreational areas</td>
+            <td>Number of People in the Grocery Stores/Gyms/Restaurants/Workplaces/Recreational Areas</td>
 
             <td><input type="text" id="storepeople" value="50" /></td>
 
@@ -51,7 +51,7 @@
 
         <tr>
 
-            <td>Number of Potential People with COVID-19 in the region</td>
+            <td>Number of Potential People with COVID-19 in the Region</td>
 
             <td><input type="text" id="potentials" value="1000" /></td>
 
@@ -75,13 +75,14 @@
         
     </table>
 
-    <h3>Search by Zip Code</h3>
+    
+    <h3>Search by FIPS</h3>
 
     <table  style="text-align: left; margin: auto; border: 1px;">
 
         <tr>
 
-            <td>Input FIPS Code: <input type="text" id="fips" value="51059" /></td>
+            <td>Input FIPS Code: <input type="text" id="fipscode" value="51059" /></td>
 
         </tr>
 
@@ -101,12 +102,59 @@
         </tr>
 
         <tr>
-            <td><small>* Data Come from US Census 2010</small></td>
+            <td>COVID **: <span id="covid"></span></td>
+
+        </tr>
+
+        <tr>
+            <td><small>* US Census 2010</small><small> ** John Hopkins.</small></td>
 
         </tr>
 
     </table>
 
+    <h3>Search by ZIP</h3>
+
+    <table  style="text-align: left; margin: auto; border: 1px;">
+
+        <tr>
+
+            <td>Input ZIP Code: <input type="text" id="zipcode" value="51059" /></td>
+
+        </tr>
+
+        <tr>
+
+            <td><input id="findzip" type="button" value="Find" /></td>
+        </tr>
+
+        <tr>
+            <td>FIPS Regions: <span id="fipsregion"></span></td>
+
+        </tr>
+
+
+        <tr>
+            <td>County: <span id="county2"></span></td>
+
+        </tr>
+
+        <tr>
+            <td>Population *: <span id="popres2"></span></td>
+
+        </tr>
+
+        <tr>
+            <td>COVID *: <span id="covid2"></span></td>
+
+        </tr>
+
+        <tr>
+            <td><small>* US Census 2010</small> <small> ** John Hopkins.</small></td>
+
+        </tr>
+
+    </table>
 
 
 
