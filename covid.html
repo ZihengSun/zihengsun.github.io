@@ -1,0 +1,132 @@
+<html>
+
+<head>
+
+    <title>COVID-19 Community Social Risk Estimator</title>
+    <meta charset="utf-8">
+    <style>
+
+        table, th, td {
+        border: 1px solid black;
+        }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
+<body style="background-color: aquamarine; text-align: center;">
+
+    <h1>COVID-19 Community Social Risk Estimator</h1>
+
+    <p>This tool is built based on the theory proposed in this 
+    <a href="https://medium.com/@jensensunny/what-is-the-chance-of-meeting-a-covid-19-infected-person-in-grocery-stores-3ca7357fafb2">
+        article</a>.</p>
+        
+    <p>The purpose of this tool is to give people a reasonable quantitative estimation about their risks of being exposed to the contact 
+    of COVID-19 virus in their communities, grocery stores, gyms, restaurants, work places, and public recreational areas. </p>
+
+    <p>If you have any questions, please contact <a href="https://zihengsun.github.io">Dr. Jensen Sun</a>. </p>
+
+    <h3>Risk Estimator</h3>
+
+    <table style="text-align: left; margin: auto; border: 1px;">
+
+        <tr>
+
+            <td>Population in the Region (Community/City/County/State/Country)</td>
+
+            <td><input type="text" id="population" value="100000"/></td>
+
+        </tr>
+
+        <tr>
+
+            <td>Number of People in the grocery stores/gyms/restaurants/workplaces/recreational areas</td>
+
+            <td><input type="text" id="storepeople" value="50" /></td>
+
+        </tr>
+
+        <tr>
+
+            <td>Number of Potential People with COVID-19 in the region</td>
+
+            <td><input type="text" id="potentials" value="1000" /></td>
+
+        </tr>
+
+        <tr>
+
+            <td colspan="2" style="text-align: center;"><input type="button" id="calc" value="Estimate" /></td>
+
+        </tr>
+
+        <tr>
+
+            <td colspan="2" style="text-align: left; word-wrap: break-word;" id="results_own">
+            
+                Estimation: 
+                
+            </td>
+
+        </tr>
+
+    </table>
+
+    <h3>Search by Zip Code</h3>
+
+    <table  style="text-align: left; margin: auto; border: 1px;">
+
+        <tr>
+
+            <td>Input Zip Code: <input type="text" value="" /></td>
+
+        </tr>
+
+        <tr>
+
+            <td><input type="button" value="Find" /></td>
+        </tr>
+
+        <tr>
+            <td>County: <span id="county"></span></td>
+
+        </tr>
+
+        <tr>
+            <td>Population *: <span id="popres"></span></td>
+
+        </tr>
+
+        <tr>
+            <td><small>* Data Come from US Census 2010</small></td>
+
+        </tr>
+
+    </table>
+
+
+
+
+    <h3 style="text-align: left;">Disclaimers for COVID-19 Community Social Risk Estimator</h3>
+
+    <p style="text-align: left;">
+        All the information on this website - zihengsun.github.io - is published in good faith and for general information purpose only. COVID-19 Community Social Risk Estimator does not make any warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information you find on this website (COVID-19 Community Social Risk Estimator), is strictly at your own risk. COVID-19 Community Social Risk Estimator will not be liable for any losses and/or damages in connection with the use of our website. Our Disclaimer was generated with the help of the Disclaimer Generator and the Disclaimer Generator.</p>
+        
+    <p style="text-align: left;">  From our website, you can visit other websites by following hyperlinks to such external sites. While we strive to provide only quality links to useful and ethical websites, we have no control over the content and nature of these sites. These links to other websites do not imply a recommendation for all the content found on these sites. Site owners and content may change without notice and may occur before we have the opportunity to remove a link which may have gone 'bad'.</p>
+    
+        <p style="text-align: left;">Please be also aware that when you leave our website, other sites may have different privacy policies and terms which are beyond our control. Please be sure to check the Privacy Policies of these sites as well as their "Terms of Service" before engaging in any business or uploading any information.</p>
+    <h3 style="text-align: left;">Consent</h3>
+    
+    <p style="text-align: left;">By using our website, you hereby consent to our disclaimer and agree to its terms.</p>
+    <h3 style="text-align: left;">Update</h3>
+    
+    <p style="text-align: left;">Should we update, amend or make any changes to this document, those changes will be prominently posted here.</p>
+
+    <script src="js/covid.js"></script>
+
+</body>
+
+</html>
