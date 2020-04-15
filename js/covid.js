@@ -313,7 +313,7 @@ function getFIPSByZip(zipcode){
 
     }
 
-    // console.log("Find FIPS " + fipslist)
+    console.log("Find FIPS " + fipslist)
 
     return fipslist;
 
