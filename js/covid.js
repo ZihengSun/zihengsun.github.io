@@ -242,6 +242,8 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
                 "; Death: " + death + "; Recovered: " + recovered)
 
             $(covid2_ele).val(confirmed)
+
+            $("#calc").click();
         
         }
      });
@@ -291,11 +293,13 @@ $("#findfips").click(function(){
 
     // var zipcode = $("#zipcode").val()
 
+    $("#county").html("")
+    $("#popres").html("")
+    $("#covid").html("")
 
     getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials");
 
     
-
 
 })
 
@@ -327,6 +331,10 @@ $("#findzip").click(function(){
 
     var content = ""
 
+    $("#county2").html("")
+    $("#popres2").html("")
+    $("#covid2").html("")
+
     for(var i=0;i<fipslist.length;i+=1){
 
         content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials')\" type=\"button\" value=\""+fipslist[i]+"\" > "
@@ -334,6 +342,7 @@ $("#findzip").click(function(){
     }
 
     $("#fipsregion").html(content)
+
 
     // getInfoByFIPS(fips, "#county2", "#popres2", "#popu", "#covid2", "#potentials");
 
