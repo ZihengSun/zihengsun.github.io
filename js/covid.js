@@ -173,6 +173,8 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
     var recovered = "N/A"
 
+    var lastupdate = "N/A"
+
     for(var i=0;i<latest_covid_array.length;i+=1){
 
         if(fipscode==latest_covid_array[i][0]){
@@ -189,7 +191,7 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
             recovered = latest_covid_array[i][9]
 
-
+            lastupdate = latest_covid_array[i][4]
 
         }
 
@@ -239,7 +241,7 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
             $(pop2_ele).val(population)
 
             $(covid_ele).html("Confirmed: " + confirmed + "; Active: " + active +
-                "; Death: " + death + "; Recovered: " + recovered)
+                "; Death: " + death + "; Recovered: " + recovered + "; Update: " + lastupdate+"")
 
             $(covid2_ele).val(confirmed)
 
@@ -282,8 +284,7 @@ $("#calc").click(function(){
 
     var risk = riskestimate(population, storepeople, potentials)
 
-    $("#results_own").html("<p>Estimation:</p>"+
-    "<p>In this region, the probability of meeting people with COVID in the grocery stores/gyms/restaurants/workplaces/recreational areas is <bold style=\"color:red\">" +  risk + "%</bold>.</p>")
+    $("#results_own").html("<p>Estimation: The probability of meeting people with COVID in the grocery stores/gyms/restaurants/workplaces/recreational areas in this region is: </p><p style=\"text-align: center;\"><bold style=\"color:red; font-size:20px;\">" +  risk + "%</bold></p>")
 
 })
 
