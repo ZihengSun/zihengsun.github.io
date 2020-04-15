@@ -10,6 +10,87 @@
  * 
  */
 
+function getDateStr(d){
+
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+
+    var str = `${mo}-${da}-${ye}`
+    console.log(str)
+
+    return str
+}
+
+const td = new Date()
+
+var today = getDateStr(td)
+
+var yd = new Date(td)
+
+yd.setDate(yd.getDate() - 1)
+
+var yesterday = getDateStr(yd)
+
+var yd2 = new Date(td)
+
+yd2.setDate(yd2.getDate() - 2)
+
+var twodaysago = getDateStr(yd2)
+
+// https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-13-2020.csv
+
+var latest_covid_array = []
+
+var count = 0
+
+function getLatestCOVID(td){
+
+    var today = getDateStr(td)
+
+    latest_covid_array = []
+
+    // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-14-2020.csv
+    // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/12-04-2020.csv
+
+    var client = new XMLHttpRequest();
+    //			client.open('GET', '../temp/ncov_hubei.csv');
+    client.open('GET', 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+today + ".csv", false);
+    client.onload = function() {
+        var csv = client.responseText;
+        var allTextLines = csv.split(/\r\n|\n/);
+
+        for(var i=1;i<allTextLines.length;i+=1){
+            
+            var cols = allTextLines[i].split(',')
+            
+            latest_covid_array.push(cols)
+
+        }
+        console.log(csv)
+    }
+    client.onerror = function(){
+
+        //file not exists
+        count += 1
+
+        if(count < 5){
+
+            var yd = new Date(td)
+
+            yd.setDate(yd.getDate() - 1)
+
+            getLatestCOVID(yd)
+
+        }
+    }
+    client.send()
+
+}
+
+getLatestCOVID(new Date())
+
+
 var rooturl = "https://zihengsun.github.io/"
 
 var zipcodecsv = rooturl + "data/uszips.csv"
@@ -22,30 +103,30 @@ var zip2fipscsv = rooturl + "data/ZIP-COUNTY-FIPS_2011-06.csv"
 
 // parse covid csv
 
-var example_covid_array = []
+// var example_covid_array = []
 
-$.ajax({
+// $.ajax({
         
-    type: "GET",
+//     type: "GET",
     
-    url: covidcsv,
+//     url: covidcsv,
     
-    dataType: "text",
+//     dataType: "text",
 
-    success: function(data) {
+//     success: function(data) {
         
-        var allTextLines = data.split(/\r\n|\n/);
+//         var allTextLines = data.split(/\r\n|\n/);
 
-        for(var i=1;i<allTextLines.length;i+=1){
+//         for(var i=1;i<allTextLines.length;i+=1){
             
-            var cols = allTextLines[i].split(',')
+//             var cols = allTextLines[i].split(',')
             
-            example_covid_array.push(cols)
+//             example_covid_array.push(cols)
 
-        }
+//         }
 
-    }
- });
+//     }
+//  });
 
 // parse the zipcodecsv
 
@@ -84,13 +165,31 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
     var population = "N/A"
 
-    for(var i=0;i<example_covid_array.length;i+=1){
+    var confirmed = "N/A"
 
-        if(fipscode==example_covid_array[i][0]){
+    var death = "N/A"
 
-            statename = example_covid_array[i][2]
+    var active = "N/A"
 
-            countyname = example_covid_array[i][1]
+    var recovered = "N/A"
+
+    for(var i=0;i<latest_covid_array.length;i+=1){
+
+        if(fipscode==latest_covid_array[i][0]){
+
+            statename = latest_covid_array[i][2]
+
+            countyname = latest_covid_array[i][1]
+
+            confirmed = latest_covid_array[i][7]
+
+            death = latest_covid_array[i][8]
+
+            active = latest_covid_array[i][10]
+
+            recovered = latest_covid_array[i][9]
+
+
 
         }
 
@@ -138,6 +237,11 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
             $(pop_ele).html(population)
 
             $(pop2_ele).val(population)
+
+            $(covid_ele).html("Confirmed: " + confirmed + "; Active: " + active +
+                "; Death: " + death + "; Recovered: " + recovered)
+
+            $(covid2_ele).val(confirmed)
         
         }
      });
@@ -190,7 +294,7 @@ $("#findfips").click(function(){
 
     getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials");
 
-    // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-13-2020.csv
+    
 
 
 })
