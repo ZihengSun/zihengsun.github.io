@@ -48,6 +48,8 @@ function getLatestCOVID(td){
 
     var today = getDateStr(td)
 
+    console.log("start to process " + today);
+
     latest_covid_array = []
 
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-14-2020.csv
@@ -56,33 +58,44 @@ function getLatestCOVID(td){
     var client = new XMLHttpRequest();
     //			client.open('GET', '../temp/ncov_hubei.csv');
     client.open('GET', 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+today + ".csv", false);
-    client.onload = function() {
-        var csv = client.responseText;
-        var allTextLines = csv.split(/\r\n|\n/);
 
-        for(var i=1;i<allTextLines.length;i+=1){
-            
-            var cols = allTextLines[i].split(',')
-            
-            latest_covid_array.push(cols)
+
+    client.onload = function() {
+        console.log(client.status)
+        if(client.status==200){
+            var csv = client.responseText;
+            var allTextLines = csv.split(/\r\n|\n/);
+
+            for(var i=1;i<allTextLines.length;i+=1){
+                
+                var cols = allTextLines[i].split(',')
+                
+                latest_covid_array.push(cols)
+
+            }
+            console.log(csv)
+        }else{
+
+            console.log("entry error")
+            //file not exists
+            count += 1
+
+            if(count < 5){
+
+                var yd = new Date(td)
+
+                yd.setDate(yd.getDate() - 1)
+
+                getLatestCOVID(yd)
+
+            }
 
         }
-        console.log(csv)
+        
     }
     client.onerror = function(){
 
-        //file not exists
-        count += 1
-
-        if(count < 5){
-
-            var yd = new Date(td)
-
-            yd.setDate(yd.getDate() - 1)
-
-            getLatestCOVID(yd)
-
-        }
+        
     }
     client.send()
 
