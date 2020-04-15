@@ -22,21 +22,21 @@ function getDateStr(d){
     return str
 }
 
-const td = new Date()
+// const td = new Date()
 
-var today = getDateStr(td)
+// var today = getDateStr(td)
 
-var yd = new Date(td)
+// var yd = new Date(td)
 
-yd.setDate(yd.getDate() - 1)
+// yd.setDate(yd.getDate() - 1)
 
-var yesterday = getDateStr(yd)
+// var yesterday = getDateStr(yd)
 
-var yd2 = new Date(td)
+// var yd2 = new Date(td)
 
-yd2.setDate(yd2.getDate() - 2)
+// yd2.setDate(yd2.getDate() - 2)
 
-var twodaysago = getDateStr(yd2)
+// var twodaysago = getDateStr(yd2)
 
 // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-13-2020.csv
 
@@ -48,7 +48,7 @@ function getLatestCOVID(td){
 
     var today = getDateStr(td)
 
-    console.log("start to process " + today);
+    // console.log("start to process " + today);
 
     latest_covid_array = []
 
@@ -61,7 +61,7 @@ function getLatestCOVID(td){
 
 
     client.onload = function() {
-        console.log(client.status)
+        // console.log(client.status)
         if(client.status==200){
             var csv = client.responseText;
             var allTextLines = csv.split(/\r\n|\n/);
@@ -73,10 +73,10 @@ function getLatestCOVID(td){
                 latest_covid_array.push(cols)
 
             }
-            console.log(csv)
+            // console.log(csv)
         }else{
 
-            console.log("entry error")
+            // console.log("entry error")
             //file not exists
             count += 1
 
