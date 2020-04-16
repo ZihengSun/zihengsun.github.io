@@ -269,19 +269,24 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
 
 function riskestimate(total_population, store_people_count, potential_covid_cases){
+    var risk = 0;
+    if(potential_covid_cases>0){
 
-    // calculate no clash probability
-    var p = 1
-    for(var i=0;i<Number(store_people_count); i+=1){
+        // calculate no clash probability
+        var p = 1
+        for(var i=0;i<Number(store_people_count); i+=1){
 
-        p = p*((Number(total_population)-i-Number(potential_covid_cases))/Number(total_population))
+            p = p*((Number(total_population)-i-Number(potential_covid_cases))/Number(total_population))
+
+        }
+
+        // get clash probability
+        var clashp = 1-p
+        // make it percentage
+        risk =  Math.round(clashp*100, 4)
 
     }
-
-    // get clash probability
-    var clashp = 1-p
-    // make it percentage
-    return Math.round(clashp*100, 4)
+    return risk
 
 }
 
