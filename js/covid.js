@@ -312,7 +312,7 @@ $("#calc").click(function(){
     "<li> <b>0-25%</b>: relatively safe with social distancing principle upheld;</li>"+
     "<li> <b>25-50%</b>: relatively serious, wear masks and gloves;</li> "+
     "<li> <b>50-75%</b>: very risky. If this is a game, the chance of you losing is over 50% with your health and wellbeing as the bet. Masks, gloves, eye protectors are recommended. Avoid touches. </li>"+
-    "<li> <b>&gt;75%</b>: highly risky; use all the protective means possible;</li></ul>"+
+    "<li> <b>&gt;75%</b>: highly risky; use all the protective means possible; avoid any contact; don't stay in the areas where there are a lot of foot traffic.</li></ul>"+
     
     "<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
     "This classification is only an example and could be inconsistent with the real situations in different regions. Use with caution.</p>")
