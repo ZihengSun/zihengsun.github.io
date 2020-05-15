@@ -306,7 +306,7 @@ $("#calc").click(function(){
     "stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
     "<p style=\"text-align: center;\">"+
     "<b style=\"color:red; font-size:20px;\">" +  risk + "%</b></p>"+
-    "<p>* A recommended interpretation of the probability:</p>"+
+    "<p>* An example interpretation:</p>"+
     "<ul>"+
     "<li> <b>&lt;10%</b>: relatively safe with social distancing principle upheld;</li> "+
     "<li> <b>10-20%</b>: relatively serious, wear masks and gloves;</li>"+
@@ -314,7 +314,7 @@ $("#calc").click(function(){
     "<li> <b>&gt;50%</b>: gambling at 50-50 chance with your health and wellbeing.</li></ul>"+
     
     "<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
-    "This classification is only a recommendation and could be inconsistent with the real situation. Use with caution.</p>")
+    "This classification is only an example and could be inconsistent with the real situations in different regions. Use with caution.</p>")
 
 })
 
