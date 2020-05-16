@@ -276,7 +276,7 @@ function riskestimate(total_population, store_people_count, potential_covid_case
         var p = 1
         for(var i=0;i<Number(store_people_count); i+=1){
 
-            p = p*((Number(total_population)-i-Number(potential_covid_cases))/Number(total_population))
+            p = p*((Number(total_population)-i-Number(potential_covid_cases))/(Number(total_population)-i))
 
         }
 
