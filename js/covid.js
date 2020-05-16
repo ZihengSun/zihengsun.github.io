@@ -309,7 +309,7 @@ $("#calc").click(function(){
     "<p>* An example interpretation:</p>"+
     "<ul>"+
 	
-    "<li> <b>0-25%</b>: relatively safe with social distancing principle upheld;</li>"+
+    "<li> <b>0-25%</b>: relatively safe with social distancing principle upheld and wearing mouth mask;</li>"+
     "<li> <b>25-50%</b>: relatively serious, wear masks and gloves;</li> "+
     "<li> <b>50-75%</b>: very risky. If this is a game, the chance of you losing is over 50% with your health and wellbeing as the bet. Masks, gloves, eye protectors are recommended. Avoid touches. </li>"+
     "<li> <b>&gt;75%</b>: highly risky; use all the protective means possible; avoid any contact; don't stay in the areas where there are a lot of foot traffic.</li></ul>"+
