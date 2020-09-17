@@ -42,15 +42,24 @@ function getDateStr(d){
 
 var latest_covid_array = []
 
+var onemonthago_covid_array = []
+
 var count = 0
 
-function getLatestCOVID(td){
+function getLatestCOVID(td, is_one_month_ago){
 
     var today = getDateStr(td)
 
     // console.log("start to process " + today);
-
-    latest_covid_array = []
+	if(is_one_month_ago){
+		
+		onemonthago_covid_array = []
+		
+	}else{
+		
+		latest_covid_array = []
+		
+	}
 
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-14-2020.csv
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/12-04-2020.csv
@@ -58,8 +67,7 @@ function getLatestCOVID(td){
     var client = new XMLHttpRequest();
     //			client.open('GET', '../temp/ncov_hubei.csv');
     client.open('GET', 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+today + ".csv", false);
-
-
+	
     client.onload = function() {
         // console.log(client.status)
         if(client.status==200){
@@ -70,7 +78,17 @@ function getLatestCOVID(td){
                 
                 var cols = allTextLines[i].split(',')
                 
-                latest_covid_array.push(cols)
+                //covid_array.push(cols)
+				
+				if(is_one_month_ago){
+		
+					onemonthago_covid_array.push(cols)
+					
+				}else{
+					
+					latest_covid_array.push(cols)
+					
+				}
 
             }
             // console.log(csv)
@@ -86,22 +104,38 @@ function getLatestCOVID(td){
 
                 yd.setDate(yd.getDate() - 1)
 
-                getLatestCOVID(yd)
+                getLatestCOVID(yd, is_one_month_ago)
 
             }
 
         }
         
     }
+	
     client.onerror = function(){
-
+		
+		console.error("Error occurs when requesting the COVID-19 data.");
         
     }
+	
     client.send()
+	
 
 }
 
-getLatestCOVID(new Date())
+var cd = new Date()
+
+getLatestCOVID(cd, false)
+
+var m = cd.getMonth();
+cd.setMonth(cd.getMonth()-1);
+if (cd.getMonth() == m) cd.setDate(0);
+cd.setHours(0, 0, 0);
+cd.setMilliseconds(0);
+
+console.log(cd)
+
+getLatestCOVID(cd, true)
 
 
 var rooturl = "https://zihengsun.github.io/"
@@ -168,7 +202,7 @@ $.ajax({
     }
  });
 
-function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid2_ele){
+function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid2_ele, covid2_1m_ele){
 
     fipscode = Number(fipscode)
 
@@ -187,6 +221,22 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
     var recovered = "N/A"
 
     var lastupdate = "N/A"
+	
+	var statename_1m = "N/A"
+
+    var countyname_1m = "N/A"
+
+    var population_1m = "N/A"
+
+    var confirmed_1m = "N/A"
+
+    var death_1m = "N/A"
+
+    var active_1m = "N/A"
+
+    var recovered_1m = "N/A"
+
+    var lastupdate_1m = "N/A"
 
     for(var i=0;i<latest_covid_array.length;i+=1){
 
@@ -205,6 +255,28 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
             recovered = latest_covid_array[i][9]
 
             lastupdate = latest_covid_array[i][4]
+
+        }
+
+    }
+	
+	for(var i=0;i<onemonthago_covid_array.length;i+=1){
+
+        if(fipscode==onemonthago_covid_array[i][0]){
+
+            statename_1m = onemonthago_covid_array[i][2]
+
+            countyname_1m = onemonthago_covid_array[i][1]
+
+            confirmed_1m = onemonthago_covid_array[i][7]
+
+            death_1m = onemonthago_covid_array[i][8]
+
+            active_1m = onemonthago_covid_array[i][10]
+
+            recovered_1m = onemonthago_covid_array[i][9]
+
+            lastupdate_1m = onemonthago_covid_array[i][4]
 
         }
 
@@ -234,7 +306,8 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
                 
                 // console.log(cols)
 
-                if(statename.toLowerCase() == cols[5].toLowerCase() 
+                if(cols[5]!=null&&cols[6]!=null
+					&&statename.toLowerCase() == cols[5].toLowerCase() 
                     && cols[6].toLowerCase().startsWith(countyname.toLowerCase())){
 
                     population = cols[7]
@@ -253,10 +326,14 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
             $(pop2_ele).val(population)
 
-            $(covid_ele).html("Confirmed: " + confirmed + "; Active: " + active +
-                "; Death: " + death + "; Recovered: " + recovered + "; Update: " + lastupdate+"")
+            $(covid_ele).html("<span  style=\"color:red;\">Current:</span> Confirmed: " + confirmed + "; Active: " + active +
+                "; Death: " + death + "; Recovered: " + recovered + "; Update: " + lastupdate+"<br/>" +
+				"<span  style=\"color:red;\">30 days ago:</span> Confirmed: " + confirmed_1m + "; Active: " + active_1m +
+                "; Death: " + death_1m + "; Recovered: " + recovered_1m + "; Update: " + lastupdate_1m+"<br/>")
 
             $(covid2_ele).val(confirmed)
+			
+			$(covid2_1m_ele).val(confirmed_1m)
 
             $("#calc").click();
         
@@ -338,7 +415,7 @@ $("#findfips").click(function(){
     $("#popres").html("")
     $("#covid").html("")
 
-    getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials");
+    getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials", "#potentials_1m_ago");
 
     
 
@@ -378,7 +455,7 @@ $("#findzip").click(function(){
 
     for(var i=0;i<fipslist.length;i+=1){
 
-        content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials')\" type=\"button\" value=\""+fipslist[i]+"\" > "
+        content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials', '#potentials_1m_ago')\" type=\"button\" value=\""+fipslist[i]+"\" > "
 
     }
 
