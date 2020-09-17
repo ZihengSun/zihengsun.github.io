@@ -268,7 +268,14 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 }
 
 
-function riskestimate(total_population, store_people_count, potential_covid_cases){
+function riskestimate(total_population, store_people_count, potential_covid_cases, potential_covid_cases_1m_ago){
+	
+	if(!potential_covid_cases_1m_ago){
+	
+		potential_covid_cases_1m_ago = 0
+	
+	}
+	
     var risk = 0;
     if(potential_covid_cases>0){
 
@@ -276,7 +283,7 @@ function riskestimate(total_population, store_people_count, potential_covid_case
         var p = 1
         for(var i=0;i<Number(store_people_count); i+=1){
 
-            p = p*((Number(total_population)-i-Number(potential_covid_cases))/(Number(total_population)-i))
+            p = p*((Number(total_population)-i-Number(potential_covid_cases)+Number(potential_covid_cases_1m_ago))/(Number(total_population)-i))
 
         }
 
@@ -297,10 +304,12 @@ $("#calc").click(function(){
     var storepeople = $("#storepeople").val()
 
     var potentials = $("#potentials").val()
+	
+	var potentials_1m_ago = $("#potentials_1m_ago").val()
 
     console.log(potentials);
 
-    var risk = riskestimate(population, storepeople, potentials)
+    var risk = riskestimate(population, storepeople, potentials, potentials_1m_ago)
 
     $("#results_own").html("<p>Estimation: The probability of meeting people with COVID in the grocery "+
     "stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
@@ -309,13 +318,13 @@ $("#calc").click(function(){
     "<p>* An example interpretation:</p>"+
     "<ul>"+
 	
-    "<li> <b>0-25%</b>: relatively safe with social distancing principle upheld and wearing mouth mask;</li>"+
-    "<li> <b>25-50%</b>: relatively serious, wear masks and gloves;</li> "+
-    "<li> <b>50-75%</b>: very risky. If this is a game, the chance of you losing is over 50% with your health and wellbeing as the bet. Masks, gloves, eye protectors are recommended. Avoid touches. </li>"+
-    "<li> <b>&gt;75%</b>: highly risky; use all the protective means possible; avoid any contact; don't stay in the areas where there are a lot of foot traffic.</li></ul>"+
+    "<li> <b>0-25%</b>: Relatively safe</li>"+
+    "<li> <b>25-50%</b>: Risky</li> "+
+    "<li> <b>50-75%</b>: Very Risky</li>"+
+    "<li> <b>&gt;75%</b>: Highly Risky. Think twice before taking actions.</li></ul>"+
     
     "<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
-    "This classification is only an example and could be inconsistent with the real situations in different regions. Use with caution.</p>")
+    "This classification is just an example. Use with caution.</p>")
 
 })
 
