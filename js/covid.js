@@ -310,7 +310,8 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 					&&statename.toLowerCase() == cols[5].toLowerCase() 
                     && cols[6].toLowerCase().startsWith(countyname.toLowerCase())){
 
-                    population = cols[7]
+                    //population = cols[7]
+					population = cols[18]
 
                     console.log("Population : ", population)
 
