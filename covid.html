@@ -24,9 +24,9 @@
     <a href="https://medium.com/@jensensunny/what-is-the-chance-of-meeting-a-covid-19-infected-person-in-grocery-stores-3ca7357fafb2">
         article</a>. COSRE paper has been published on <a href="https://www.sciencedirect.com/science/article/pii/S1353829220310339?dgcid=author">Health &amp; Place</a> and a preprint was released on <a href="https://arxiv.org/abs/2006.10497">arXiv</a>.</p>
         
-    <p>The purpose of this tool is trying to give people a reasonable quantitative estimation about their risks of being exposed to the contact of COVID-19 virus in their communities, grocery stores, gyms, restaurants, work places, and public recreational areas. This is a pure statistical estimation calculated based on the data from public resources. The real chance could be very different from the results of this tool. Please use this tool with the knowledge preparation and interpret the results with caution. </p>
+    <p>The purpose of this tool is trying to give people a reasonable quantitative estimation about their risks of being exposed to the contact of COVID-19 virus in their communities, grocery stores, gyms, restaurants, work places, and public recreational areas. This is a pure statistical estimation based on the data from public resources. The real chance could be very different from the estimation. Please use this tool with acknowledgment and interpret the results with caution. </p>
     
-    <p><span style="color:red">WARNING:</span> The default number of people in the room is 100. This might be a underestimation of the situation. It should be adjusted according to the real situation. The virus might stay alive in the air or on the surface of matters for a while. In that interval, anybody contacted the air or the object surface might be infected. The number of people should count all the person who have passed the area within the virus active period. </p>
+    <p><span style="color:red">WARNING:</span> The default number of people in the room is 100. This might be a under-/over- estimation. It should be adjusted according to the real situation. According to CDC website, the virus could stay alive in the air and on object surface for a while. In that interval, anybody contacted the air or touched the object surface is considered "exposed". The number of people should count all the person who have passed the area within the virus active period. </p>
 
     <h3>Risk Estimator</h3>
 
@@ -42,7 +42,7 @@
 
         <tr>
 
-            <td  style="width: 80%;">Number of People in the Grocery Stores/Gyms/Restaurants/Workplaces/Recreational Areas/Beaches</td>
+            <td  style="width: 80%;"># of People in the Grocery Stores/Gyms/Restaurants/Workplaces/Recreational Areas/Beaches</td>
 
             <td><input type="text" id="storepeople" value="100" /></td>
 
@@ -50,7 +50,7 @@
 
         <tr>
 
-            <td  style="width: 80%;">Number of Potential People with COVID-19 in the Region</td>
+            <td  style="width: 80%;"># of Active Cases in the Region</td>
 
             <td><input type="text" id="potentials" value="1000" /></td>
 
@@ -58,12 +58,37 @@
 		
 		<tr>
 
-            <td  style="width: 80%;">Number of Potential People with COVID-19 in the Region 30 days ago</td>
+            <td  style="width: 80%;"># of Active Cases in the Region 15 days ago</td>
+
+            <td><input type="text" id="potentials_15_ago" value="0" /></td>
+
+        </tr>
+		
+		<tr>
+
+            <td  style="width: 80%;"># of Active Cases in the Region 30 days ago</td>
 
             <td><input type="text" id="potentials_1m_ago" value="0" /></td>
 
         </tr>
+		
+		<tr>
 
+            <td  style="width: 80%;"># of Active Cases in the Region 56 days ago</td>
+
+            <td><input type="text" id="potentials_56_ago" value="0" /></td>
+
+        </tr>
+		
+		<tr>
+
+            <td  style="width: 80%;"># of Deaths in the Region</td>
+
+            <td><input type="text" id="deaths" value="0" /></td>
+
+        </tr>
+
+		
         <tr>
 
             <td colspan="2" style="text-align: center;"><input type="button" id="calc" value="Estimate" /></td>
@@ -203,6 +228,8 @@
 	<p style="text-align: left;">10/1/2020 - COSRE paper has been published on Health & Place.</a>
 	
 	<p style="text-align: left;">11/2/2020 - Population uses 2019 estimate.</a>
+	
+	<p style="text-align: left;">11/3/2020 - The estimation of real active cases is updated according to recommendations from CDC and state government agencies.</a>
 
     <p>If you have questions about the tool, please contact <a href="https://zihengsun.github.io">Dr. Jensen Sun</a>. </br>
         Dr. Sun is a research assistant professor from <a target="_blank" href="https://ggs.gmu.edu" >Department of Geography & Geoinformation Science Department</a> and <a target="_blank" href="http://csiss.gmu.edu">Center for Spatial Information Science and Systems</a>, 

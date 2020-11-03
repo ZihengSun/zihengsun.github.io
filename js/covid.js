@@ -42,16 +42,22 @@ function getDateStr(d){
 
 var latest_covid_array = []
 
+var covid_array_15daysago = []
+
 var onemonthago_covid_array = []
+
+var covid_array_56daysago = []
+
+var all_arrays = [[], [], [], []]
 
 var count = 0
 
-function getLatestCOVID(td, is_one_month_ago){
+function getLatestCOVID(td, index){
 
     var today = getDateStr(td)
 
     // console.log("start to process " + today);
-	if(is_one_month_ago){
+	/**if(is_one_month_ago){
 		
 		onemonthago_covid_array = []
 		
@@ -59,7 +65,9 @@ function getLatestCOVID(td, is_one_month_ago){
 		
 		latest_covid_array = []
 		
-	}
+	}**/
+	
+	all_arrays[index] = []
 
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/04-14-2020.csv
     // https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/12-04-2020.csv
@@ -80,7 +88,7 @@ function getLatestCOVID(td, is_one_month_ago){
                 
                 //covid_array.push(cols)
 				
-				if(is_one_month_ago){
+				/**if(is_one_month_ago){
 		
 					onemonthago_covid_array.push(cols)
 					
@@ -88,7 +96,9 @@ function getLatestCOVID(td, is_one_month_ago){
 					
 					latest_covid_array.push(cols)
 					
-				}
+				}**/
+				
+				all_arrays[index].push(cols)
 
             }
             // console.log(csv)
@@ -104,12 +114,14 @@ function getLatestCOVID(td, is_one_month_ago){
 
                 yd.setDate(yd.getDate() - 1)
 
-                getLatestCOVID(yd, is_one_month_ago)
+                getLatestCOVID(yd, the_array)
 
             }
 
         }
-        
+		
+		
+		
     }
 	
     client.onerror = function(){
@@ -120,23 +132,48 @@ function getLatestCOVID(td, is_one_month_ago){
 	
     client.send()
 	
-
 }
 
-var cd = new Date()
+function getOldDays(num_of_days){
+	
+	var cd = new Date()
+	
+	var m = cd.getMonth();
+	
+	//cd.setMonth(cd.getMonth()-1);
+	cd.setDate(cd.getDate()-num_of_days);
+	
+	if (cd.getMonth() == m) cd.setDate(0);
+	
+	cd.setHours(0, 0, 0);
+	
+	cd.setMilliseconds(0);
 
-getLatestCOVID(cd, false)
+	console.log(cd)
 
-var m = cd.getMonth();
-cd.setMonth(cd.getMonth()-1);
-if (cd.getMonth() == m) cd.setDate(0);
-cd.setHours(0, 0, 0);
-cd.setMilliseconds(0);
+	return cd;
+	
+}
 
-console.log(cd)
+// Active Cases = (100% of new cases from last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count
 
-getLatestCOVID(cd, true)
+var current_day = getOldDays(0)
 
+var day_15_ago = getOldDays(15)
+
+var day_30_ago = getOldDays(30)
+
+var day_56_ago = getOldDays(56)
+
+getLatestCOVID(current_day, 0)
+
+getLatestCOVID(day_15_ago, 1)
+
+getLatestCOVID(day_30_ago, 2)
+
+getLatestCOVID(day_56_ago, 3)
+
+console.log(all_arrays)
 
 var rooturl = "https://zihengsun.github.io/"
 
@@ -177,7 +214,7 @@ var zip2fipscsv = rooturl + "data/ZIP-COUNTY-FIPS_2011-06.csv"
 
 // parse the zipcodecsv
 
-zip2fips = []
+var zip2fips = []
 
 $.ajax({
         
@@ -201,8 +238,62 @@ $.ajax({
 
     }
  });
+ 
+//download population csv
+var population_array = []
 
-function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid2_ele, covid2_1m_ele){
+$.ajax({
+        
+	type: "GET",
+	
+	url: popcsv,
+	
+	dataType: "text",
+
+	success: function(data) {
+		
+		population_array = data
+		
+		console.log("population is here.")
+	
+	}
+});
+
+function getPop(statename, countyname){
+	
+	// var record_num = 15;  // or however many elements there are in each row
+	var allTextLines = population_array.split(/\r\n|\n/);
+	var entries = allTextLines[0].split(',');
+	var lines = [];
+
+	var population = ""
+
+	for(var i=0;i<allTextLines.length;i+=1){
+		
+		var cols = allTextLines[i].split(',')
+		
+		// console.log(cols)
+
+		if(cols[5]!=null&&cols[6]!=null
+			&&statename.toLowerCase() == cols[5].toLowerCase() 
+			&& cols[6].toLowerCase().startsWith(countyname.toLowerCase())){
+
+			//population = cols[7]
+			population = cols[18]
+
+			console.log("Population : ", population)
+
+			break;
+
+		}
+
+	}
+	
+	return population;
+	
+}
+
+function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid2_ele, covid2_1m_ele, covid2_15_ele, covid2_56_ele, death_ele){
 
     fipscode = Number(fipscode)
 
@@ -222,6 +313,22 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
     var lastupdate = "N/A"
 	
+	var statename_15 = "N/A"
+
+    var countyname_15 = "N/A"
+
+    var population_15 = "N/A"
+
+    var confirmed_15 = "N/A"
+
+    var death_15 = "N/A"
+
+    var active_15 = "N/A"
+
+    var recovered_15 = "N/A"
+
+    var lastupdate_15 = "N/A"
+	
 	var statename_1m = "N/A"
 
     var countyname_1m = "N/A"
@@ -237,116 +344,147 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
     var recovered_1m = "N/A"
 
     var lastupdate_1m = "N/A"
+	
+	var statename_56 = "N/A"
 
-    for(var i=0;i<latest_covid_array.length;i+=1){
+    var countyname_56 = "N/A"
 
-        if(fipscode==latest_covid_array[i][0]){
+    var population_56 = "N/A"
 
-            statename = latest_covid_array[i][2]
+    var confirmed_56 = "N/A"
 
-            countyname = latest_covid_array[i][1]
+    var death_56 = "N/A"
 
-            confirmed = latest_covid_array[i][7]
+    var active_56 = "N/A"
 
-            death = latest_covid_array[i][8]
+    var recovered_56 = "N/A"
 
-            active = latest_covid_array[i][10]
+    var lastupdate_56 = "N/A"
 
-            recovered = latest_covid_array[i][9]
+    for(var i=0;i<all_arrays[0].length;i+=1){
 
-            lastupdate = latest_covid_array[i][4]
+        if(fipscode==all_arrays[0][i][0]){
+
+            statename = all_arrays[0][i][2]
+
+            countyname = all_arrays[0][i][1]
+
+            confirmed = all_arrays[0][i][7]
+
+            death = all_arrays[0][i][8]
+
+            active = all_arrays[0][i][10]
+
+            recovered = all_arrays[0][i][9]
+
+            lastupdate = all_arrays[0][i][4]
 
         }
 
     }
 	
-	for(var i=0;i<onemonthago_covid_array.length;i+=1){
+	for(var i=0;i<all_arrays[1].length;i+=1){
 
-        if(fipscode==onemonthago_covid_array[i][0]){
+        if(fipscode==all_arrays[1][i][0]){
 
-            statename_1m = onemonthago_covid_array[i][2]
+            statename_15 = all_arrays[1][i][2]
 
-            countyname_1m = onemonthago_covid_array[i][1]
+            countyname_15 = all_arrays[1][i][1]
 
-            confirmed_1m = onemonthago_covid_array[i][7]
+            confirmed_15 = all_arrays[1][i][7]
 
-            death_1m = onemonthago_covid_array[i][8]
+            death_15 = all_arrays[1][i][8]
 
-            active_1m = onemonthago_covid_array[i][10]
+            active_15 = all_arrays[1][i][10]
 
-            recovered_1m = onemonthago_covid_array[i][9]
+            recovered_15 = all_arrays[1][i][9]
 
-            lastupdate_1m = onemonthago_covid_array[i][4]
+            lastupdate_15 = all_arrays[1][i][4]
 
         }
 
     }
+	
+	for(var i=0;i<all_arrays[2].length;i+=1){
 
+        if(fipscode==all_arrays[2][i][0]){
 
-    $.ajax({
-        
-        type: "GET",
-        
-        url: popcsv,
-        
-        dataType: "text",
+            statename_1m = all_arrays[2][i][2]
 
-        success: function(data) {
-            
-            // var record_num = 15;  // or however many elements there are in each row
-            var allTextLines = data.split(/\r\n|\n/);
-            var entries = allTextLines[0].split(',');
-            var lines = [];
+            countyname_1m = all_arrays[2][i][1]
 
-            var population = ""
+            confirmed_1m = all_arrays[2][i][7]
 
-            for(var i=0;i<allTextLines.length;i+=1){
-                
-                var cols = allTextLines[i].split(',')
-                
-                // console.log(cols)
+            death_1m = all_arrays[2][i][8]
 
-                if(cols[5]!=null&&cols[6]!=null
-					&&statename.toLowerCase() == cols[5].toLowerCase() 
-                    && cols[6].toLowerCase().startsWith(countyname.toLowerCase())){
+            active_1m = all_arrays[2][i][10]
 
-                    //population = cols[7]
-					population = cols[18]
+            recovered_1m = all_arrays[2][i][9]
 
-                    console.log("Population : ", population)
+            lastupdate_1m = all_arrays[2][i][4]
 
-                    break;
-
-                }
-
-            }
-
-            $(county_ele).html(countyname + ", " + statename)
-
-            $(pop_ele).html(population)
-
-            $(pop2_ele).val(population)
-
-            $(covid_ele).html("<span  style=\"color:red;\">Current:</span> Confirmed: " + confirmed + "; Active: " + active +
-                "; Death: " + death + "; Recovered: " + recovered + "; Update: " + lastupdate+"<br/>" +
-				"<span  style=\"color:red;\">30 days ago:</span> Confirmed: " + confirmed_1m + "; Active: " + active_1m +
-                "; Death: " + death_1m + "; Recovered: " + recovered_1m + "; Update: " + lastupdate_1m+"<br/>")
-
-            $(covid2_ele).val(confirmed)
-			
-			$(covid2_1m_ele).val(confirmed_1m)
-
-            $("#calc").click();
-        
         }
-     });
 
+    }
+	
+	for(var i=0;i<all_arrays[3].length;i+=1){
+
+        if(fipscode==all_arrays[3][i][0]){
+
+            statename_56 = all_arrays[3][i][2]
+
+            countyname_56 = all_arrays[3][i][1]
+
+            confirmed_56 = all_arrays[3][i][7]
+
+            death_56 = all_arrays[3][i][8]
+
+            active_56 = all_arrays[3][i][10]
+
+            recovered_56 = all_arrays[3][i][9]
+
+            lastupdate_56 = all_arrays[3][i][4]
+
+        }
+
+    }
+	
+	var population = getPop(statename, countyname);
+
+	$(county_ele).html(countyname + ", " + statename)
+
+	$(pop_ele).html(population)
+
+	$(pop2_ele).val(population)
+	
+	$(death_ele).val(death)
+
+	$(covid_ele).html(
+		"<span  style=\"color:red;\">Current:</span> Confirmed: " + confirmed + "; Active: " + active +
+		"; Death: " + death + "; Recovered: " + recovered + "; Update: " + lastupdate+"<br/>" +
+		"<span  style=\"color:red;\">15 days ago:</span> Confirmed: " + confirmed_15 + "; Active: " + active_15 +
+		"; Death: " + death_15+ "; Recovered: " + recovered_15 + "; Update: " + lastupdate_15 + "<br/>"+
+		"<span  style=\"color:red;\">30 days ago:</span> Confirmed: " + confirmed_1m + "; Active: " + active_1m +
+		"; Death: " + death_1m + "; Recovered: " + recovered_1m + "; Update: " + lastupdate_1m+"<br/>"+
+		"<span  style=\"color:red;\">56 days ago:</span> Confirmed: " + confirmed_56 + "; Active: " + active_56 +
+		"; Death: " + death_56 + "; Recovered: " + recovered_56 + "; Update: " + lastupdate_56 + "<br/>")
+
+	$(covid2_ele).val(confirmed)
+	
+	$(covid2_15_ele).val(confirmed_15)
+	
+	$(covid2_1m_ele).val(confirmed_1m)
+	
+	$(covid2_56_ele).val(confirmed_56)
+
+	$("#calc").click();
     
 
 }
 
 
-function riskestimate(total_population, store_people_count, potential_covid_cases, potential_covid_cases_1m_ago){
+function riskestimate(total_population, store_people_count, potential_covid_cases, potential_covid_cases_1m_ago, 
+	potential_covid_cases_15_ago, potential_covid_cases_56_ago, deaths){
 	
 	if(!potential_covid_cases_1m_ago){
 	
@@ -356,13 +494,23 @@ function riskestimate(total_population, store_people_count, potential_covid_case
 	
     var risk = 0;
     if(potential_covid_cases>0){
+		
+		// (100% of new cases from last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count 
+		
+		var active_cases = Math.floor((potential_covid_cases - potential_covid_cases_15_ago) + 
+			0.19*(potential_covid_cases_15_ago-potential_covid_cases_1m_ago) + 
+			0.05*(potential_covid_cases_1m_ago-potential_covid_cases_56_ago) - deaths)
+			
+		if(active_cases<0)
+			active_cases = 0;
 
         // calculate no clash probability
         var p = 1
+		
         for(var i=0;i<Number(store_people_count); i+=1){
 
-            p = p*((Number(total_population)-i-Number(potential_covid_cases)+Number(potential_covid_cases_1m_ago))/(Number(total_population)-i))
-
+            p = p*((Number(total_population)-i-Number(active_cases))/(Number(total_population)-i))
+			
         }
 
         // get clash probability
@@ -383,26 +531,33 @@ $("#calc").click(function(){
 
     var potentials = $("#potentials").val()
 	
+	var potentials_15_ago = $("#potentials_15_ago").val()
+	
 	var potentials_1m_ago = $("#potentials_1m_ago").val()
+	
+	var potentials_56_ago = $("#potentials_56_ago").val()
+	
+	var deaths = $("#deaths").val()
 
     console.log(potentials);
 
-    var risk = riskestimate(population, storepeople, potentials, potentials_1m_ago)
+    var risk = riskestimate(population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths)
 
     $("#results_own").html("<p>Estimation: The probability of meeting people with COVID in the grocery "+
-    "stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
-    "<p style=\"text-align: center;\">"+
-    "<b style=\"color:red; font-size:20px;\">" +  risk + "%</b></p>"+
-    "<p>* An example interpretation:</p>"+
-    "<ul>"+
-	
-    "<li> <b>0-25%</b>: Relatively safe</li>"+
-    "<li> <b>25-50%</b>: Risky</li> "+
-    "<li> <b>50-75%</b>: Very Risky</li>"+
-    "<li> <b>&gt;75%</b>: Highly Risky. Think twice before taking actions.</li></ul>"+
-    
-    "<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
-    "This classification is just an example. Use with caution.</p>")
+		"stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
+		"<p style=\"text-align: center;\">"+
+		"<b style=\"color:red; font-size:20px;\">" +  risk + "%</b></p>"+
+		"<p>* An example interpretation:</p>"+
+		"<ul>"+
+		
+		"<li> <b>0-25%</b>: Relatively safe</li>"+
+		"<li> <b>25-50%</b>: Risky</li> "+
+		"<li> <b>50-75%</b>: Very Risky</li>"+
+		"<li> <b>&gt;75%</b>: Highly Risky. Think twice before taking actions.</li></ul>"+
+		
+		"<p style=\"text-align: left;\">* Real Active Cases = (100% of new cases from the last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count </p>"+
+		"<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
+		"This classification is just an example. Use with caution.</p>")
 
 })
 
@@ -416,7 +571,7 @@ $("#findfips").click(function(){
     $("#popres").html("")
     $("#covid").html("")
 
-    getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials", "#potentials_1m_ago");
+    getInfoByFIPS(fipscode, "#county", "#popres", "#popu", "#covid", "#potentials", "#potentials_1m_ago", "#potentials_15_ago", "#potentials_56_ago", "#deaths");
 
     
 
@@ -456,7 +611,7 @@ $("#findzip").click(function(){
 
     for(var i=0;i<fipslist.length;i+=1){
 
-        content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials', '#potentials_1m_ago')\" type=\"button\" value=\""+fipslist[i]+"\" > "
+        content += "<input onclick=\"getInfoByFIPS('"+fipslist[i]+"', '#county2', '#popres2', '#popu', '#covid2', '#potentials', '#potentials_1m_ago', '#potentials_15_ago', '#potentials_56_ago', '#deaths')\" type=\"button\" value=\""+fipslist[i]+"\" > "
 
     }
 
