@@ -143,7 +143,7 @@ function getOldDays(num_of_days){
 	//cd.setMonth(cd.getMonth()-1);
 	cd.setDate(cd.getDate()-num_of_days);
 	
-	if (cd.getMonth() == m) cd.setDate(0);
+	//if (cd.getMonth() == m) cd.setDate(0);
 	
 	cd.setHours(0, 0, 0);
 	
@@ -157,7 +157,7 @@ function getOldDays(num_of_days){
 
 // Active Cases = (100% of new cases from last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count
 
-var current_day = getOldDays(0)
+var current_day = getOldDays(1)
 
 var day_15_ago = getOldDays(15)
 
