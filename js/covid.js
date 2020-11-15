@@ -515,7 +515,7 @@ function calculate_safe_venue(target_risk, total_population, store_people_count,
 				
 				var label = false;
 				
-				for(var i=1;i<=500; i+=1){    
+				for(var i=1;i<=10000; i+=1){    
 					
 					var next_people_p = (Number(total_population)-Number(active_cases)-i)/(Number(total_population)-i);
 					
@@ -547,7 +547,7 @@ function calculate_safe_venue(target_risk, total_population, store_people_count,
 				
 				if(!label){
 					
-					safe_venue_number = 500;
+					safe_venue_number = "Unlimited";
 					
 				}
 				
