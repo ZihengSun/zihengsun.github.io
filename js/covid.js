@@ -79,6 +79,7 @@ function getLatestCOVID(td, index){
     client.onload = function() {
         // console.log(client.status)
         if(client.status==200){
+			console.log("enter 200");
             var csv = client.responseText;
             var allTextLines = csv.split(/\r\n|\n/);
 
@@ -103,7 +104,7 @@ function getLatestCOVID(td, index){
             }
             // console.log(csv)
         }else{
-
+			console.log("enter non-200");
             // console.log("entry error")
             //file not exists
             count += 1
@@ -114,7 +115,7 @@ function getLatestCOVID(td, index){
 
                 yd.setDate(yd.getDate() - 1)
 
-                getLatestCOVID(yd, the_array)
+                getLatestCOVID(yd, index)
 
             }
 
@@ -482,6 +483,86 @@ function getInfoByFIPS(fipscode, county_ele, pop_ele, pop2_ele, covid_ele, covid
 
 }
 
+function calculate_safe_venue(target_risk, total_population, store_people_count, potential_covid_cases, potential_covid_cases_1m_ago, 
+	potential_covid_cases_15_ago, potential_covid_cases_56_ago, deaths){
+	
+	var safe_venue_number = 25;
+	
+	try{
+
+		if(!potential_covid_cases_1m_ago){
+		
+			potential_covid_cases_1m_ago = 0
+		
+		}
+		
+		var risk = 0;
+		
+		if(potential_covid_cases>0){
+			
+			// (100% of new cases from last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count 
+			
+			var active_cases = Math.floor((potential_covid_cases - potential_covid_cases_15_ago) + 
+				0.19*(potential_covid_cases_15_ago-potential_covid_cases_1m_ago) + 
+				0.05*(potential_covid_cases_1m_ago-potential_covid_cases_56_ago) - deaths)
+				
+			if(active_cases>0){
+				
+				// calculate no clash probability
+				var r = 1-Number(target_risk)
+				
+				var p = 1;
+				
+				for(var i=1;i<=500; i+=1){    
+					
+					var next_people_p = (Number(total_population)-Number(active_cases)-i)/(Number(total_population)-i);
+					
+					//console.log("Probability of next people: " + next_people_p);
+					
+					var next_two_people_p = (Number(total_population)-Number(active_cases)-i-1)/(Number(total_population)-i-1);
+
+					//console.log("Probability of next two people: " + next_two_people_p);
+					
+					p = p*(next_people_p);
+					
+					//console.log("New Probability on the right: " + p);
+					
+					var p_r_diff = p-r;
+					
+					//console.log("p_r_difference is " + p_r_diff);
+					
+					if(p_r_diff<=0){
+						
+						safe_venue_number = i;
+						
+						break;
+					
+					}
+						
+				}
+
+				// get clash probability
+				var clashp = 1-p
+				// make it percentage
+				risk =  Math.round(clashp*100, 4)
+				
+			}else{
+				
+				safe_venue_number = "Unlimited";
+				
+			}
+			
+		}
+		
+	}catch(error){
+		
+		console.log(error);
+		
+	}
+	
+	return safe_venue_number;
+	
+}
 
 function riskestimate(total_population, store_people_count, potential_covid_cases, potential_covid_cases_1m_ago, 
 	potential_covid_cases_15_ago, potential_covid_cases_56_ago, deaths){
@@ -501,23 +582,24 @@ function riskestimate(total_population, store_people_count, potential_covid_case
 			0.19*(potential_covid_cases_15_ago-potential_covid_cases_1m_ago) + 
 			0.05*(potential_covid_cases_1m_ago-potential_covid_cases_56_ago) - deaths)
 			
-		if(active_cases<0)
-			active_cases = 0;
-
-        // calculate no clash probability
-        var p = 1
-		
-        for(var i=0;i<Number(store_people_count); i+=1){
-
-            p = p*((Number(total_population)-i-Number(active_cases))/(Number(total_population)-i))
+		if(active_cases>0){
 			
-        }
+			// calculate no clash probability
+			var p = 1
+			
+			for(var i=0;i<Number(store_people_count); i+=1){
 
-        // get clash probability
-        var clashp = 1-p
-        // make it percentage
-        risk =  Math.round(clashp*100, 4)
+				p = p*((Number(total_population)-i-Number(active_cases))/(Number(total_population)-i))
+				
+			}
 
+			// get clash probability
+			var clashp = 1-p
+			// make it percentage
+			risk =  Math.round(clashp*100, 4)
+			
+		}
+	
     }
     return risk
 
@@ -538,10 +620,17 @@ $("#calc").click(function(){
 	var potentials_56_ago = $("#potentials_56_ago").val()
 	
 	var deaths = $("#deaths").val()
+	
 
     console.log(potentials);
 
     var risk = riskestimate(population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths)
+	
+	var safe_venue_number_10 = calculate_safe_venue(0.1, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
+	
+	var safe_venue_number_25 = calculate_safe_venue(0.25, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
+	
+	var safe_venue_number_50 = calculate_safe_venue(0.5, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
 
     $("#results_own").html("<p>Estimation: The probability of meeting people with COVID in the grocery "+
 		"stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
@@ -555,9 +644,18 @@ $("#calc").click(function(){
 		"<li> <b>50-75%</b>: Very Risky</li>"+
 		"<li> <b>&gt;75%</b>: Highly Risky. Think twice before taking actions.</li></ul>"+
 		
-		"<p style=\"text-align: left;\">* Real Active Cases = (100% of new cases from the last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count </p>"+
+		
 		"<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
-		"This classification is just an example. Use with caution.</p>")
+		"This classification is just an example. Use with caution.</p>"+
+		"<p style=\"text-align: left;\">* Real Active Cases = (100% of new cases from the last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count </p>"+
+		
+		"<p>* Safety measure:</p>"+
+		"<ul>"+
+		"<li> To reduce the risk under <b>10%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_10+"</b>. </li>"+
+		"<li> To reduce the risk under <b>25%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_25+"</b>. </li>"+
+		"<li> To reduce the risk under <b>50%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_50+"</b>. </li></ul>"+
+		"<br/>"
+		)
 
 })
 
