@@ -513,6 +513,8 @@ function calculate_safe_venue(target_risk, total_population, store_people_count,
 				
 				var p = 1;
 				
+				var label = false;
+				
 				for(var i=1;i<=500; i+=1){    
 					
 					var next_people_p = (Number(total_population)-Number(active_cases)-i)/(Number(total_population)-i);
@@ -535,16 +537,19 @@ function calculate_safe_venue(target_risk, total_population, store_people_count,
 						
 						safe_venue_number = i;
 						
+						label = true;
+						
 						break;
 					
 					}
 						
 				}
-
-				// get clash probability
-				var clashp = 1-p
-				// make it percentage
-				risk =  Math.round(clashp*100, 4)
+				
+				if(!label){
+					
+					safe_venue_number = 500;
+					
+				}
 				
 			}else{
 				
@@ -626,6 +631,8 @@ $("#calc").click(function(){
 
     var risk = riskestimate(population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths)
 	
+	var safe_venue_number_5 = calculate_safe_venue(0.05, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
+	
 	var safe_venue_number_10 = calculate_safe_venue(0.1, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
 	
 	var safe_venue_number_25 = calculate_safe_venue(0.25, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
@@ -649,8 +656,9 @@ $("#calc").click(function(){
 		"This classification is just an example. Use with caution.</p>"+
 		"<p style=\"text-align: left;\">* Real Active Cases = (100% of new cases from the last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count </p>"+
 		
-		"<p>* Safety measure:</p>"+
+		"<p>* Safety measure (pure statistical results without considering the population variation due to mobility):</p>"+
 		"<ul>"+
+		"<li> To reduce the risk under <b>5%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_5+"</b>. </li>"+
 		"<li> To reduce the risk under <b>10%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_10+"</b>. </li>"+
 		"<li> To reduce the risk under <b>25%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_25+"</b>. </li>"+
 		"<li> To reduce the risk under <b>50%</b>, the people in the store/venue should not exceed <b>"+safe_venue_number_50+"</b>. </li></ul>"+
