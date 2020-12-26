@@ -16,6 +16,8 @@
         body {
             font-family: 'Open Sans', sans-serif !important;
         }
+		
+		white-text: {text-color: white !important;}
 
     </style>
 
@@ -28,31 +30,31 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-7"><p class="h3 font-weight-bold">The probability of meeting people with COVID19 in your venue is: </p></div>
+            <div class="col-md-5" ></div>
+            <div class="col-md-7"><br/><p class="h4 font-weight-bold">The probability of meeting people with COVID19 in your venue is: </p></div>
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4" >
             
             <div class="form-group">
-                <label for="zipcode">US ZipCode *</label>
+                <label for="zipcode" >US ZipCode *</label>
                 <input type="zipcode" class="form-control" id="zipcode" aria-describedby="Zipcode Help" placeholder="Enter 5 digits only">
                 <small id="zipcode Help" class="form-text text-muted"></small>
             </div>
             <br/>
 
             <div class="form-group d-none" id="fips-parent">
-                <label for="fips">Select A County *</label>
+                <label for="fips" >Select A County *</label>
                 <select type="fips" class="form-control" id="fips" aria-describedby="FIPS Help" >
                 </select>
-                <small id="zipcode Help" class="form-text text-muted">Some zipcodes cross multiple counties 
+                <small id="zipcode Help" class="form-text text-muted"><!--Some zipcodes cross multiple counties -->
                     <span style="color: red;" id="fipsalert" ></span>
                 </small>
             </div>
             <br/>
 
             <div class="form-group">
-                <label for="store_num">Number of people in your venue (e.g. grocery store, gym, restaurant, workplace or recreational area) <span style="font-size: 12px; color: grey;">* Note the default of 100 people will be used if no value is entered</span></label>
+                <label for="store_num" >Number of people in your venue (e.g. grocery store, gym, restaurant, workplace or recreational area) <span style="font-size: 12px; color: grey;">* Note the default of 100 people will be used if no value is entered</span></label>
                 <input type="number" class="form-control" id="store_num" aria-describedby="emailHelp" placeholder="Enter Estimate of People in Venue" value="100" >
                 <small id="storenumberHelp" class="form-text text-muted"></small>
             </div>
@@ -66,17 +68,17 @@
             <div class="row"><div class="col-md-12"><p> </p></div></div>
             <div class="row">
                 <div class="col-md-5"><p> </p></div>
-                <div class="col-md-2"><p class="text-danger" style="font-size: 30px;" id="cosre_score"></p></div>
+                <div class="col-md-2"><p style="font-size: 30px;" id="cosre_score"></p></div>
                 <div class="col-md-5"><p> </p></div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <p>An example thresholds - use with caution and apply contextual information.</p>
                     <ul>
-                        <li>0-25%: relatively safe</li>
-                        <li>25-50%: risky</li>
-                        <li>50-75%: very risky</li>
-                        <li>>75%: highly risky - think twice before entering venue</li>
+                        <li><span style="color: #008900;">0-25%: relatively safe</span></li>
+                        <li><span style="color: #e5e500;">25-50%: risky</span></li>
+                        <li><span style="color: #e59400;">50-75%: very risky</span></li>
+                        <li><span style="color: #990000;">>75%: highly risky - think twice before entering venue</span></li>
                     </ul>
                 </div>
                 <div class="col-md-12">

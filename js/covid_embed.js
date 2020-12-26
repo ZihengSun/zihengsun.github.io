@@ -621,7 +621,7 @@ function showFIPSSelect(zipcode){
 
 	if(fipslist==null || fipslist.length==0){
 
-		$("#fipsalert").html("Cannot find county of the zip code.");
+		$("#fipsalert").html("Cannot find county match for zip code.");
 
 	}else{
 
@@ -686,7 +686,14 @@ $("#calc").on("click", function(){
 	
 	var safe_venue_number_50 = calculate_safe_venue(0.5, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
 
-	$("#cosre_score").html(risk + "%");
+	var score_renderred = "<span >" + risk + "%</span>";
+	
+	if(risk < 25 && risk >=0) score_renderred = "<span style=\"color:#008900;\">" + risk + "%</span>";
+	if(risk < 50 && risk >=25) score_renderred = "<span style=\"color:#e5e500;\">" + risk + "%</span>";	
+	if(risk < 75 && risk >=50) score_renderred = "<span style=\"color:#e59400;\">" + risk + "%</span>";	
+	if(risk <= 100 && risk >=75) score_renderred = "<span style=\"color:#990000;\">" + risk + "%</span>";	
+	
+	$("#cosre_score").html(score_renderred);
 
 	$("#venue_planning").html("");
 
