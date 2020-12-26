@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <title>COVID-19 Community Social Risk Estimator (COSRE)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+
+        table, th, td {
+        border: 1px solid black;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif !important;
+        }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-7"><p class="h3 font-weight-bold">The probability of meeting people with COVID19 in your venue is: </p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            
+            <div class="form-group">
+                <label for="zipcode">US ZipCode *</label>
+                <input type="zipcode" class="form-control" id="zipcode" aria-describedby="Zipcode Help" placeholder="Enter ZipCode">
+                <small id="zipcode Help" class="form-text text-muted">5 digit US zipcode only</small>
+            </div>
+            <br/>
+
+            <div class="form-group d-none" id="fips-parent">
+                <label for="fips">Select A County *</label>
+                <select type="fips" class="form-control" id="fips" aria-describedby="FIPS Help" >
+                </select>
+                <small id="zipcode Help" class="form-text text-muted">Some zipcodes cross multiple counties 
+                    <span style="color: red;" id="fipsalert" ></span>
+                </small>
+            </div>
+            <br/>
+
+            <div class="form-group">
+                <label for="store_num">Number of people in your venue (e.g. grocery store, gym, restaurant, workplace or recreational area)</label>
+                <input type="number" class="form-control" id="store_num" aria-describedby="emailHelp" placeholder="Enter Number of People in Venue" value="100" >
+                <small id="storenumberHelp" class="form-text text-muted">Give an estimate based on the cars in the parking lot or use default 100</small>
+            </div>
+            <br/>
+
+            <button type="button" id="calc" class="btn btn-outline-secondary ">Submit</button>
+
+          </div>
+          <div class="col-md-1"></div>
+          <div class="col-md-7">
+            <div class="row"><div class="col-md-12"><p> </p></div></div>
+            <div class="row">
+                <div class="col-md-5"><p> </p></div>
+                <div class="col-md-2"><p class="text-danger" style="font-size: 30px;" id="cosre_score"></p></div>
+                <div class="col-md-5"><p> </p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>An example thresholds - use with caution and apply contextual information.</p>
+                    <ul>
+                        <li>0-25%: relatively safe</li>
+                        <li>25-50%: risky</li>
+                        <li>50-75%: very risky</li>
+                        <li>>75%: highly risky - think twice before entering venue</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <p>Venue no. planning - the statistical calculations do not consider variation due to mobility</p>
+                    <ul id="venue_planning">
+                        
+                    </ul>
+
+                </div>
+                <div class="col-md-12 ">
+                    <div class="d-flex justify-content-end"><a href="https://zihengsun.github.io/covid.html" target="_blank" style="color:grey; margin-right: 0;"><em>Disclaimers</em></a></div>
+
+                </div>
+
+            </div>
+          </div>
+          
+        </div>
+
+    </div>
+
+    
+
+    <script src="js/covid_embed.js"></script>
+
+
+</body>
+
+</html>
