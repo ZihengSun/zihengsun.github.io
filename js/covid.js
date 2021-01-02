@@ -638,20 +638,27 @@ $("#calc").click(function(){
 	var safe_venue_number_25 = calculate_safe_venue(0.25, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
 	
 	var safe_venue_number_50 = calculate_safe_venue(0.5, population, storepeople, potentials, potentials_1m_ago, potentials_15_ago, potentials_56_ago, deaths);
+	
+	var score_renderred = "<span >" + risk + "%</span>";
+	
+	if(risk < 25 && risk >=0) score_renderred = "<span style=\"color:#008900;\">" + risk + "%</span>";
+	if(risk < 50 && risk >=25) score_renderred = "<span style=\"color:#e5e500;\">" + risk + "%</span>";	
+	if(risk < 75 && risk >=50) score_renderred = "<span style=\"color:#e59400;\">" + risk + "%</span>";	
+	if(risk <= 100 && risk >=75) score_renderred = "<span style=\"color:#990000;\">" + risk + "%</span>";	
 
     $("#results_own").html("<p>Estimation: The probability of meeting people with COVID in the grocery "+
 		"stores/gyms/restaurants/workplaces/recreational areas in this region is: </p>"+
 		"<p style=\"text-align: center;\">"+
-		"<b style=\"color:red; font-size:20px;\">" +  risk + "%</b></p>"+
+		"<b style=\"color:red; font-size:20px;\">" +  score_renderred + "</b></p>"+
 		"<p>* An example interpretation:</p>"+
 		"<ul>"+
 		
-		"<li> <b>0-25%</b>: Relatively safe</li>"+
-		"<li> <b>25-50%</b>: Risky</li> "+
-		"<li> <b>50-75%</b>: Very Risky</li>"+
-		"<li> <b>&gt;75%</b>: Highly Risky. Think twice before taking actions.</li></ul>"+
+		"<li><span style=\"color: #008900;\">0-25%</span>: low risk</li>"+
+		"<li><span style=\"color: #e5e500;\">25-50%</span>: moderate risk</li>"+
+		"<li><span style=\"color: #e59400;\">50-75%</span>: high risk</li>"+
+		"<li><span style=\"color: #990000;\">>75%</span>: very high risk</li>"+
 		
-		
+		"</ul>"+
 		"<p style=\"text-align: left;\"><span style=\"color:red;\">WARNING</span>: "+
 		"This classification is just an example. Use with caution.</p>"+
 		"<p style=\"text-align: left;\">* Real Active Cases = (100% of new cases from the last 14 days + 19% of days 15-30 + 5% of days 31-56) - Death Count </p>"+
