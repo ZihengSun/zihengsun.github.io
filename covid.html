@@ -253,9 +253,15 @@
 
 				
 				
-				<h3>COVID-19 US Community Social Risk Trends</h3>
+				<h3>COVID-19 US COSRE Risk Trends Animation</h3>
 				
-				<IMG SRC="img/us_zipcodes_100.gif">
+				<figure>
+				  <img src="img/gif_cover.png" data-alt="img/us_zipcodes_100.gif">
+				</figure>
+				
+				<p>Click the Image to Play</p>
+
+				<!--<IMG SRC="img/us_zipcodes_100.gif">-->
 				
 				<hr class="featurette-divider">
 
@@ -296,7 +302,7 @@
 				
 				<p style="text-align: left;">11/15/2020 - Add safety measures to estimate how many people should be allowed in the venue to bring down the risk to safe level.</a></p>
 				
-				<p style="text-align: left;">1/2/2021 - Website look is improved using bootstrap. The score interpretation is rendered according to risk levels. Remove the notice about new york city because it works now. </a></p>
+				<p style="text-align: left;">1/2/2021 - Website look is improved using bootstrap. The score interpretation is rendered according to risk levels. Remove the notice about new york city because it works now. Enable async loading of gif.  </a></p>
 				
 				
 				
@@ -327,6 +333,46 @@
 	</div>
     
     <script src="js/covid.js"></script>
+	
+	<script>
+	
+		var getGif = function() {
+		  var gif = [];
+		  $('img').each(function() {
+			var data = $(this).data('alt');
+			gif.push(data);
+		  });
+		  return gif;
+		}
+		var gif = getGif();
+		
+		// Preload all the GIF.
+		var image = [];
+		 
+		$.each(gif, function(index) {
+		  image[index]     = new Image();
+		  image[index].src = gif[index];
+		});
+		
+		$('figure').on('click', function() {
+ 
+		  var $this   = $(this),
+				  $index  = $this.index(),
+				   
+				  $img    = $this.children('img'),
+				  $imgSrc = $img.attr('src'),
+				  $imgAlt = $img.attr('data-alt'),
+				  $imgExt = $imgAlt.split('.');
+				   
+		  if($imgExt[1] === 'gif') {
+			  $img.attr('src', $img.data('alt')).attr('data-alt', $imgSrc);
+		  } else {
+			  $img.attr('src', $imgAlt).attr('data-alt', $img.data('alt'));
+		  }
+		 
+		});
+	
+	</script>
 
 
 </body>
