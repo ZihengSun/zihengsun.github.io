@@ -4,242 +4,328 @@
 
     <title>COVID-19 Community Social Risk Estimator (COSRE)</title>
     <meta charset="utf-8">
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <style>
 
         table, th, td {
-        border: 1px solid black;
+			border: 1px solid black;
+        }
+		
+		body {
+            font-family: 'Open Sans' !important;
         }
 
     </style>
-
+	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
 </head>
 
-<body style="background-color: aquamarine; text-align: center;">
+<!--background-color: aquamarine; -->
 
-    <h1>COVID-19 Community Social Risk Estimator (COSRE)</h1>
+<body style="background-color: white; padding:10px;">
 
-    <p>This tool is built based on the theory proposed in this 
-    <a href="https://medium.com/@jensensunny/what-is-the-chance-of-meeting-a-covid-19-infected-person-in-grocery-stores-3ca7357fafb2">
-        article</a>. COSRE paper has been published on <a href="https://www.sciencedirect.com/science/article/pii/S1353829220310339?dgcid=author">Health &amp; Place</a> and a preprint was released on <a href="https://arxiv.org/abs/2006.10497">arXiv</a>.</p>
-        
-    <p>The purpose of this tool is trying to give people a reasonable quantitative estimation about their risks of being exposed to the contact of COVID-19 virus in their communities, grocery stores, gyms, restaurants, work places, and public recreational areas. This is a pure statistical estimation based on the data from public resources. The real chance could be very different from the estimation. Please use this tool with acknowledgment and interpret the results with caution. </p>
-    
-    <p><span style="color:red">WARNING:</span> The default number of people in the room is 100. This might be a under-/over- estimation. It should be adjusted according to the real situation. According to CDC website, the virus could stay alive in the air and on object surface for a while. In that interval, anybody contacted the air or touched the object surface is considered "exposed". The number of people should count all the person who have passed the area within the virus active period. </p>
 
-    <h3>Risk Estimator</h3>
-
-    <table style="text-align: left; margin: auto; border: 1px;">
-
-        <tr>
-
-            <td  style="width: 80%;">Population in the Region (Community/City/County/State/Country)</td>
-
-            <td><input type="text" id="popu" value="100000"/></td>
-
-        </tr>
-
-        <tr>
-
-            <td  style="width: 80%;"># of People in the Grocery Stores/Gyms/Restaurants/Workplaces/Recreational Areas/Beaches</td>
-
-            <td><input type="text" id="storepeople" value="100" /></td>
-
-        </tr>
-
-        <tr>
-
-            <td  style="width: 80%;"># of Active Cases in the Region</td>
-
-            <td><input type="text" id="potentials" value="1000" /></td>
-
-        </tr>
+	<div   class = "page-header"> 
+	  <div class="bg-light p-5 rounded-lg m-3">
+		<h1 class="display-4"><img src="img/SARS-CoV-2_without_background.png" width="70" height="70" /> COVID-19 Community Social Risk Estimator (COSRE)</h1>
+		<p class="lead">This tool is built on the theory proposed in this <a href="https://medium.com/@jensensunny/what-is-the-chance-of-meeting-a-covid-19-infected-person-in-grocery-stores-3ca7357fafb2">
+		article</a>. COSRE manuscript has been published on <a href="https://www.sciencedirect.com/science/article/pii/S1353829220310339?dgcid=author">Health &amp; Place</a> and a preprint is available on <a href="https://arxiv.org/abs/2006.10497">arXiv</a>.</p>
+		<a class="btn btn-primary btn-lg" target="_blank" href="https://www.sciencedirect.com/science/article/pii/S1353829220310339?dgcid=author" role="button">Learn more</a>
+	  </div>
+	  <hr class="my-4">
+	  
+	</div>
+	
+	
+	<div class="container">
+	
+		<div class="row">
 		
-		<tr>
-
-            <td  style="width: 80%;"># of Active Cases in the Region 15 days ago</td>
-
-            <td><input type="text" id="potentials_15_ago" value="0" /></td>
-
-        </tr>
+			<div class="col-md-12">
+			
+				<p>The purpose of this tool is to give people a reasonable quantitative estimation about exposure risks to COVID-19 in community venues such as grocery stores, gyms, restaurants, work places, and public recreational areas. This is a pure statistical estimation calculated from public data. The real chance could be very different. Please use it with knowledge and interpret the results with caution. </p>
+				
+				
+				<p><span style="color:red">WARNING:</span> The default number of people in the room is 100. This might be a under-/over- estimation. It should be adjusted according to the real situation. According to CDC website, the virus could stay alive in the air and on object surface for a while. In that interval, anybody contacted the air or touched the object surface is considered "exposed". The number of people should count all the person who have passed the area within the virus active period. </p>
+			</div>
 		
-		<tr>
+		</div>
+	
+		<div class="row" style="text-align:center;">
+	
+			<div class="col-md-1"></div>
+			<div class="col-md-10" >
+			
+				
+				
+				<div class="row bg-light" >
+				
+					
+					
+					<div class="col-md-5"  style="padding:10px;">
+					
+						<h4>Search by ZIP</h4>
 
-            <td  style="width: 80%;"># of Active Cases in the Region 30 days ago</td>
+						<table  style="text-align: left; margin: auto; border: 1px;">
 
-            <td><input type="text" id="potentials_1m_ago" value="0" /></td>
+							<tr>
 
-        </tr>
+								<td colspan="2">Input ZIP Code: <input type="text" id="zipcode" value="22030" /></td>
+
+							</tr>
+
+							<tr>
+
+								<td colspan="2"><input id="findzip" type="button" value="Find" /></td>
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">FIPS Regions: </td><td><span id="fipsregion"></span></td>
+
+							</tr>
+
+
+							<tr>
+								<td style="width: 40%;">County: </td><td><span id="county2"></span></td>
+
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">Population *:</td><td> <span id="popres2"></span></td>
+
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">COVID **: </td><td><span id="covid2"></span></td>
+
+							</tr>
+
+							<tr>
+								<td colspan="2">
+									<p style="margin:0;padding: 0;"><small>* US Census 2019 Estimate</small> <small> ** John Hopkins.</small></p>
+									<p style="margin:0;padding: 0;"><small>The function doesn't work in New York City.</small> </p>
+								</td>
+
+							</tr>
+
+						</table>
+						
+						<hr class="featurette-divider">
+
+						<h4>Search by FIPS</h4>
+
+						<table  style="text-align: left; margin: auto; border: 1px;">
+
+							<tr>
+
+								<td colspan="2">Input FIPS Code: <input type="text" id="fipscode" value="51059" /></td>
+
+							</tr>
+
+							<tr>
+
+								<td colspan="2"><input id="findfips" type="button" value="Find" /></td>
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">County: </td><td><span id="county"></span></td>
+
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">Population *:</td><td><span id="popres"></span></td>
+
+							</tr>
+
+							<tr>
+								<td style="width: 40%;">COVID **:</td><td> <span id="covid"></span></td>
+
+							</tr>
+
+							<tr>
+								<td colspan="2">
+									<p style="margin:0;padding: 0;"><small>* US Census 2019 Estimate</small><small> ** John Hopkins.</small></p>
+									<p style="margin:0;padding: 0;"><small>Doesn't work in New York City.</small> </p>
+								</td>
+
+							</tr>
+
+						</table>
+					
+					</div>
+					
+					<div class="col-md-7" style="padding:10px;">
+					
+						
+						<h3>Risk Estimator</h3>
+
+						<table style="text-align: left; margin: auto; border: 1px;">
+
+							<tr>
+
+								<td  style="width: 80%;">Population in the Region (Community/City/County/State/Country)</td>
+
+								<td><input type="text" id="popu" value="100000"/></td>
+
+							</tr>
+
+							<tr>
+
+								<td  style="width: 80%;"># of People in the Grocery Stores/Gyms/Restaurants/Workplaces/Recreational Areas/Beaches</td>
+
+								<td><input type="text" id="storepeople" value="100" /></td>
+
+							</tr>
+
+							<tr>
+
+								<td  style="width: 80%;"># of Active Cases in the Region</td>
+
+								<td><input type="text" id="potentials" value="1000" /></td>
+
+							</tr>
+							
+							<tr>
+
+								<td  style="width: 80%;"># of Active Cases in the Region 15 days ago</td>
+
+								<td><input type="text" id="potentials_15_ago" value="0" /></td>
+
+							</tr>
+							
+							<tr>
+
+								<td  style="width: 80%;"># of Active Cases in the Region 30 days ago</td>
+
+								<td><input type="text" id="potentials_1m_ago" value="0" /></td>
+
+							</tr>
+							
+							<tr>
+
+								<td  style="width: 80%;"># of Active Cases in the Region 56 days ago</td>
+
+								<td><input type="text" id="potentials_56_ago" value="0" /></td>
+
+							</tr>
+							
+							<tr>
+
+								<td  style="width: 80%;"># of Deaths in the Region</td>
+
+								<td><input type="text" id="deaths" value="0" /></td>
+
+							</tr>
+
+							
+							<tr>
+
+								<td colspan="2" style="text-align: center;"><input type="button" id="calc" value="Estimate" /></td>
+
+							</tr>
+
+							<tr>
+
+								<td colspan="2" style="text-align: left; word-wrap: break-word;" id="results_own">
+								
+									Estimation: 
+									
+								</td>
+
+							</tr>
+							
+							
+						</table>
+					
+					</div>
+					
+					<div class="col-md-1" ></div>
+				
+				</div>
+				
+				
+
+				<hr class="featurette-divider">
+				
+
+				
+				
+				<h3>COVID-19 US Community Social Risk Trends</h3>
+				
+				<IMG SRC="img/us_zipcodes_100.gif">
+				
+				<hr class="featurette-divider">
+
+				
+				<h3 style="text-align: left;">Disclaimer</h3>
+
+				<p style="text-align: left;">
+					All the information on this website - zihengsun.github.io - is published in good faith and for general information purpose only. COVID-19 Community Social Risk Estimator does not make any warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information you find on this website (COVID-19 Community Social Risk Estimator), is strictly at your own risk. COVID-19 Community Social Risk Estimator developers and owners will not be liable for any losses and/or damages in connection with the use of our website. Our Disclaimer was generated with the help of the Disclaimer Generator and the Disclaimer Generator.</p>
+					
+				<p style="text-align: left;">  From our website, you can visit other websites by following hyperlinks to such external sites. While we strive to provide only quality links to useful and ethical websites, we have no control over the content and nature of these sites. These links to other websites do not imply a recommendation for all the content found on these sites. Site owners and content may change without notice and may occur before we have the opportunity to remove a link which may have gone 'bad'.</p>
+				
+					<p style="text-align: left;">Please be also aware that when you leave our website, other sites may have different privacy policies and terms which are beyond our control. Please be sure to check the Privacy Policies of these sites as well as their "Terms of Service" before engaging in any business or uploading any information.</p>
+				<h3 style="text-align: left;">Consent</h3>
+				
+				<p style="text-align: left;">By using our website, you hereby consent to our disclaimer and agree to its terms. Terms are subject to future change. </p>
+				
+				<hr class="featurette-divider">
+				
+				<h3 style="text-align: left;">Update</h3>
+				
+				<p style="text-align: left;">Should we update, amend or make any changes to this document, those changes will be prominently posted here.</p>
+
+				<p style="text-align: left;">4/20/2020 - Add a recommendation interpreting classification.</p>
+
+				<p style="text-align: left;">5/15/2020 - Revise the example interpretation system.</p>
+				
+				<p style="text-align: left;">5/16/2020 - !!! Estimation algorithm is revised based on the suggestions from Manó and Józsi. Please refer to the Medium article for details.</p>
+				
+				<p style="text-align: left;">9/16/2020 - An animation of the COSRE map time series is created to show the trends of COVID venure risk in contiguous United States. Remove specific policy guidelines which are not science-based and inappropriate. The confirmed number of 30 days ago is subtracted from the active COVID cases to be more precise. </p>
+				
+				<p style="text-align: left;">10/1/2020 - COSRE paper has been published on Health & Place.</a></p>
+				
+				<p style="text-align: left;">11/2/2020 - Population uses 2019 estimate.</a></p>
+				
+				<p style="text-align: left;">11/3/2020 - The estimation of real active cases is updated according to recommendations from CDC and state government agencies.</a></p>
+				
+				<p style="text-align: left;">11/9/2020 - Fix the problem that the date doesn't move forward automatically.</a></p>
+				
+				<p style="text-align: left;">11/15/2020 - Add safety measures to estimate how many people should be allowed in the venue to bring down the risk to safe level.</a></p>
+				
+				<p style="text-align: left;">1/2/2021 - Website look improved with bootstrap.</a></p>
+				
+				
+				
+
+			
+			</div>
+		</div>
+	
+	</div>
+	
+	<hr class="featurette-divider">
+
+	<div class="footer bg-light p-5 rounded-lg m-3">
+	
+		<div class="row">
 		
-		<tr>
-
-            <td  style="width: 80%;"># of Active Cases in the Region 56 days ago</td>
-
-            <td><input type="text" id="potentials_56_ago" value="0" /></td>
-
-        </tr>
+			<div class="col-md-12">
+			
+				<p>If you have questions about the tool, please contact <a href="https://zihengsun.github.io">Dr. Jensen Sun</a>. </br>
+		Dr. Sun is a research assistant professor from <a target="_blank" href="https://ggs.gmu.edu" >Department of Geography & Geoinformation Science Department</a> and <a target="_blank" href="http://csiss.gmu.edu">Center for Spatial Information Science and Systems</a>, 
+		<a target="_blank" href="https://www.gmu.edu">George Mason University</a>. </p>
+			
+			</div>
+			
 		
-		<tr>
-
-            <td  style="width: 80%;"># of Deaths in the Region</td>
-
-            <td><input type="text" id="deaths" value="0" /></td>
-
-        </tr>
-
-		
-        <tr>
-
-            <td colspan="2" style="text-align: center;"><input type="button" id="calc" value="Estimate" /></td>
-
-        </tr>
-
-        <tr>
-
-            <td colspan="2" style="text-align: left; word-wrap: break-word;" id="results_own">
-            
-                Estimation: 
-                
-            </td>
-
-        </tr>
-        
-        
-    </table>
-
+		</div>
+	
+	</div>
     
-    
-
-    <h3>Search by ZIP</h3>
-
-    <table  style="text-align: left; margin: auto; border: 1px;">
-
-        <tr>
-
-            <td colspan="2">Input ZIP Code: <input type="text" id="zipcode" value="22030" /></td>
-
-        </tr>
-
-        <tr>
-
-            <td colspan="2"><input id="findzip" type="button" value="Find" /></td>
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">FIPS Regions: </td><td><span id="fipsregion"></span></td>
-
-        </tr>
-
-
-        <tr>
-            <td style="width: 40%;">County: </td><td><span id="county2"></span></td>
-
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">Population *:</td><td> <span id="popres2"></span></td>
-
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">COVID **: </td><td><span id="covid2"></span></td>
-
-        </tr>
-
-        <tr>
-            <td colspan="2">
-                <p style="margin:0;padding: 0;"><small>* US Census 2019 Estimate</small> <small> ** John Hopkins.</small></p>
-                <p style="margin:0;padding: 0;"><small>The function doesn't work in New York City.</small> </p>
-            </td>
-
-        </tr>
-
-    </table>
-
-    <h3>Search by FIPS</h3>
-
-    <table  style="text-align: left; margin: auto; border: 1px;">
-
-        <tr>
-
-            <td colspan="2">Input FIPS Code: <input type="text" id="fipscode" value="51059" /></td>
-
-        </tr>
-
-        <tr>
-
-            <td colspan="2"><input id="findfips" type="button" value="Find" /></td>
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">County: </td><td><span id="county"></span></td>
-
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">Population *:</td><td><span id="popres"></span></td>
-
-        </tr>
-
-        <tr>
-            <td style="width: 40%;">COVID **:</td><td> <span id="covid"></span></td>
-
-        </tr>
-
-        <tr>
-            <td colspan="2">
-                <p style="margin:0;padding: 0;"><small>* US Census 2019 Estimate</small><small> ** John Hopkins.</small></p>
-                <p style="margin:0;padding: 0;"><small>Doesn't work in New York City.</small> </p>
-            </td>
-
-        </tr>
-
-    </table>
-	
-	<h3>COVID-19 US Community Social Risk Trends</h3>
-	
-	<IMG SRC="img/us_zipcodes_100.gif">
-
-    
-    <h3 style="text-align: left;">Disclaimers for COVID-19 Community Social Risk Estimator</h3>
-
-    <p style="text-align: left;">
-        All the information on this website - zihengsun.github.io - is published in good faith and for general information purpose only. COVID-19 Community Social Risk Estimator does not make any warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information you find on this website (COVID-19 Community Social Risk Estimator), is strictly at your own risk. COVID-19 Community Social Risk Estimator developers and owners will not be liable for any losses and/or damages in connection with the use of our website. Our Disclaimer was generated with the help of the Disclaimer Generator and the Disclaimer Generator.</p>
-        
-    <p style="text-align: left;">  From our website, you can visit other websites by following hyperlinks to such external sites. While we strive to provide only quality links to useful and ethical websites, we have no control over the content and nature of these sites. These links to other websites do not imply a recommendation for all the content found on these sites. Site owners and content may change without notice and may occur before we have the opportunity to remove a link which may have gone 'bad'.</p>
-    
-        <p style="text-align: left;">Please be also aware that when you leave our website, other sites may have different privacy policies and terms which are beyond our control. Please be sure to check the Privacy Policies of these sites as well as their "Terms of Service" before engaging in any business or uploading any information.</p>
-    <h3 style="text-align: left;">Consent</h3>
-    
-    <p style="text-align: left;">By using our website, you hereby consent to our disclaimer and agree to its terms.</p>
-    <h3 style="text-align: left;">Update</h3>
-    
-    <p style="text-align: left;">Should we update, amend or make any changes to this document, those changes will be prominently posted here.</p>
-
-    <p style="text-align: left;">4/20/2020 - Add a recommendation interpreting classification.</p>
-
-    <p style="text-align: left;">5/15/2020 - Revise the example interpretation system.</p>
-	
-	<p style="text-align: left;">5/16/2020 - !!! Estimation algorithm is revised based on the suggestions from Manó and Józsi. Please refer to the Medium article for details.</p>
-	
-	<p style="text-align: left;">9/16/2020 - An animation of the COSRE map time series is created to show the trends of COVID venure risk in contiguous United States. Remove specific policy guidelines which are not science-based and inappropriate. The confirmed number of 30 days ago is subtracted from the active COVID cases to be more precise. </p>
-	
-	<p style="text-align: left;">10/1/2020 - COSRE paper has been published on Health & Place.</a></p>
-	
-	<p style="text-align: left;">11/2/2020 - Population uses 2019 estimate.</a></p>
-	
-	<p style="text-align: left;">11/3/2020 - The estimation of real active cases is updated according to recommendations from CDC and state government agencies.</a></p>
-	
-	<p style="text-align: left;">11/9/2020 - Fix the problem that the date doesn't move forward automatically.</a></p>
-	
-	<p style="text-align: left;">11/15/2020 - Add safety measures to estimate how many people should be allowed in the venue to bring down the risk to safe level.</a></p>
-
-    <p>If you have questions about the tool, please contact <a href="https://zihengsun.github.io">Dr. Jensen Sun</a>. </br>
-        Dr. Sun is a research assistant professor from <a target="_blank" href="https://ggs.gmu.edu" >Department of Geography & Geoinformation Science Department</a> and <a target="_blank" href="http://csiss.gmu.edu">Center for Spatial Information Science and Systems</a>, 
-        <a target="_blank" href="https://www.gmu.edu">George Mason University</a>. </p>
-    
-
     <script src="js/covid.js"></script>
 
 
